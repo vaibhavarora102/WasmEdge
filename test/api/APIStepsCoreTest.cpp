@@ -185,8 +185,8 @@ TEST_P(CoreTest, TestSuites) {
     if (GlobCxt == nullptr) {
       return Unexpect(ErrCode::WrongInstanceAddress);
     }
-    return convToValVec(std::vector<WasmEdge_Value>{
-        WasmEdge_GlobalInstanceGetValue(GlobCxt)});
+    return std::vector<ValVariant>{
+        WasmEdge_GlobalInstanceGetValue(GlobCxt).Value};
   };
 
   T.run(Proposal, UnitName);

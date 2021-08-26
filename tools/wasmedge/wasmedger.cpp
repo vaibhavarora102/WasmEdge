@@ -3,6 +3,7 @@
 #include "common/filesystem.h"
 #include "common/value.h"
 #include "common/version.h"
+#include "common/tracer.h"
 #include "host/wasi/wasimodule.h"
 #include "host/wasmedge_process/processmodule.h"
 #include "po/argument_parser.h"
@@ -12,6 +13,9 @@
 #include <iostream>
 
 int main(int Argc, const char *Argv[]) {
+  WasmEdge::Tracer::initTracer();
+  auto span  = WasmEdge::Tracer::get_tracer()->StartSpan("wasmedge-main");
+  auto scope = WasmEdge::Tracer::get_tracer()->WithActiveSpan(span);
   namespace PO = WasmEdge::PO;
   using namespace std::literals;
 
@@ -241,4 +245,5 @@ int main(int Argc, const char *Argv[]) {
       return EXIT_FAILURE;
     }
   }
+  span->End();
 }
